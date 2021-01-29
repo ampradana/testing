@@ -1,0 +1,40 @@
+<odoo>
+    <data>
+
+    <record id="message_report_view" model="ir.ui.view">
+            <field name="name">Message Report Wizard</field>
+            <field name="model">message.report.wizard</field>
+            <field name="arch" type="xml">
+               <form>
+                   <group>
+                       <group string="Select Date">
+                                <field name="from_date"/>
+                                <field name="to_date"/>
+                        </group>
+                        <group>
+                              
+                        </group>
+                        <footer>
+                            <button string="Apply" name="apply_report" type="object" class="btn-primary"/>
+                            <button string="Discard" class="btn-default" special="cancel"/>
+                        </footer>
+                    </group>
+               </form>
+            </field>
+        </record>
+
+        <record id="action_report_wizard" model="ir.actions.act_window">
+            <field name="name">Report Recapitulation</field>
+            <field name="res_model">message.report.wizard</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="message_report_view"/>
+            <field name="target">new</field>
+        </record>
+
+
+
+
+    </data>
+</odoo>

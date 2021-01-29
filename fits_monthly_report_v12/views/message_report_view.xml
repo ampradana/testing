@@ -1,0 +1,50 @@
+<odoo>
+    <data>
+	  <record model="ir.ui.view" id="view_report_message_tree">
+	        <field name="name">message.report.tree</field>
+	        <field name="model">hr.employee</field>
+	        <field name="mode">primary</field>
+	        <field name="priority" eval="30" />
+	        <field name="arch" type="xml">
+	            <tree string="Report Recapitulation" decoration-danger="unapproved!=0" >
+	            	<field name="period"/>
+	                <field name="name"/>
+	                <field name="day_work"/>               
+	                <field name="kehadiran"/>
+	                <field name="at_site"/>
+                    <field name="workday_hadir"/>
+                    <field name="holiday_hadir"/>  
+                    <field name="leave"/> 
+                    <field name="unapproved"/>               
+	                <field name="no_check"/>
+	                <field name="terlambat"/>
+	                <field name="pla"/>
+	                <field name="hdl"/>
+	                <field name="mess"/>
+	            </tree>
+	        </field>
+	    </record>
+	    
+	    <record id="view_message_report_search_form" model="ir.ui.view">
+            <field name="name">message.report.search.form</field>
+            <field name="model">mail.message</field>
+            <field name="arch" type="xml">
+               <search string="Message Report">
+                    <group expand="0" string="Group By">
+                        <filter string="Aurthor" name="author" context="{'group_by':'author_id'}"/>
+                        <filter string="Date" name="date" context="{'group_by':'date:day'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+	    
+	    <record model="ir.actions.act_window" id="action_date">
+	        <field name="name">Report Recapitulation</field>
+	        <field name="res_model">hr.employee</field>
+	        <field name="view_type">tree</field>
+		    <field name="view_mode">tree</field>
+	        <field name="view_id" ref="view_report_message_tree"/>
+	    </record> 
+    
+  </data>
+</odoo>

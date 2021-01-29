@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+         <report
+            id="action_monthly_report"
+            model="monthly.wizard"
+            string="Monthly Report Employee"
+            report_type="qweb-pdf"
+            name="fits_monthly_report_v12.report_monthly"
+            file="fits_monthly_report_v12.report_monthly" 
+            />
+
+
+<!--Model Employee Menu-->
+
+        <menuitem id="print_monthly"
+                  name="Monthly Report"
+                  sequence="100"
+                  parent="hr.menu_hr_root"/>
+
+        <menuitem id="print_report"
+                  name="Print Report"
+                  action="fits_monthly_report_v12.action_print_monthly_wizard"
+                  sequence="3"
+                  parent="fits_monthly_report_v12.print_monthly"/> 
+
+        <menuitem id="menu_report_message"
+                   name="Report Recapitulation"
+                   action="action_report_wizard"
+                   parent="fits_monthly_report_v12.print_monthly"
+                   groups="hr.group_hr_manager"
+                   sequence="4"/>
+
+        <menuitem id="menu_activity"
+                  name="Summary Activity"
+                  action="action_activity"
+                  parent="fits_monthly_report_v12.print_monthly"
+                  sequence="2" />
+
+
+<!--Model Attendance Menu-->
+
+        <menuitem id="print_monthly_attendance"
+                  name="Monthly Report"
+                  sequence="50"
+                  parent="hr_attendance.menu_hr_attendance_root"/>
+
+        <menuitem id="print_report_attendance"
+                  name="Print Report"
+                  action="fits_monthly_report_v12.action_print_monthly_wizard"
+                  sequence="3"
+                  parent="print_monthly_attendance"/>
+
+        <menuitem id="menu_report_message_attendance"
+                   name="Report Recapitulation"
+                   action="action_report_wizard"
+                   parent="print_monthly_attendance"
+                   groups="hr.group_hr_manager"
+                   sequence="4"/>
+
+        <menuitem id="menu_activity_attendance"
+                  name="Summary Activity"
+                  action="action_activity"
+                  parent="print_monthly_attendance"
+                  sequence="2" />
+
+
+    </data>
+</odoo>
