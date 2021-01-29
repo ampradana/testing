@@ -1,0 +1,493 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+<!--<record id="fits_monthly_report.action_report_print_monthly" model="ir.actions.report.xml">-->
+<!--    <field name="paperformat_id" ref="asa_project.paperformat_lowmargin"/>-->
+<!--</record>-->
+	
+	<template id="report_monthly">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+
+                    <h3 class="text-center">
+                       Monthly Summary
+                    </h3>
+                    <br/>
+
+                    <table width="100%">
+                 	<td class="text-left">
+                    <table>
+                        <tr><td>Employee Name</td><td> : </td><td><span t-esc="identification[0]['name']"/></td></tr>
+                        <tr><td>Employee Number</td><td> : </td><td><span t-esc="identification[0]['id']"/></td></tr>
+                        <tr><td>Department</td><td> : </td><td><span t-esc="identification[0]['department']"/></td></tr>
+                        <tr><td>Job Title</td><td> : </td><td><span t-esc="identification[0]['job']"/></td></tr>
+                    </table>
+                    </td>
+                    <td class="text-right">
+                    <table>
+                    	<tr><td>Timesheet Period</td><td> :</td><td><span t-esc="period"/></td></tr>
+                    	<tr><td>Report Date</td><td> :</td><td><t t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d')"/></td></tr>
+                    </table>
+                    </td>
+                 </table>
+                 <br/>
+                 <br/>
+					<!--<table class="table table-condensed" style="font-size:12px;" width="100%">
+						<thead>
+							<tr>
+								<th class="text-center" style="width:10%; border: solid 1px #000;">No.</th>
+								<th class="text-center" style="width:50%; border: solid 1px #000;">Project Name</th>
+								<th class="text-center" style="width:20%; border: solid 1px #000;">Manager</th>
+								<th class="text-center" style="width:20%; border: solid 1px #000;">Duration</th>
+							</tr>
+					   </thead>
+					   <tbody class="sale_tbody">
+									<tr t-foreach="timesheets" t-as="t">
+										<td class="text-center" style="border: solid 1px #000;">
+											<span t-esc="t_index + 1"/>
+										</td>
+										<td class="text-left" style="border: solid 1px #000;">
+											<span t-esc="t['project']"/>
+										</td>
+										<td class="text-left" style="border: solid 1px #000;">
+											<span t-esc="t['manager']"/>
+										</td>
+										<td class="text-right" style="border: solid 1px #000;">
+											<span t-esc="t['duration']"/>
+										</td>
+									</tr>
+						</tbody>
+						<tr>
+							<td style="border-left:solid 1px #000; border-bottom:solid 1px #000;"></td>
+							<td style="border-bottom:solid 1px #000;"></td>
+							<td class="text-center" style="border-bottom:solid 1px #000; font-weight: bold;">Total Duration</td>
+							<td class="text-right" style="border: solid 1px #000; font-weight: bold;">
+							<t t-esc="total"/></td>
+						</tr>
+					</table>-->
+				<div style="font-weight: bold;"><u>Timesheet &amp; Attendance Detail :</u></div>
+				<table width="100%">
+                 	<td>
+                    <table>
+                        <tr><td>Total Jam Timesheet</td><td> : </td><td><span t-esc="'%02d:%02d' % (int(att[0]['tot_timesheet']), att[0]['tot_timesheet'] % 1 * 60)" /></td></tr>
+                        <tr><td>Total Jam Attendance</td><td> : </td><td><span t-esc="'%02d:%02d' % (int(att[0]['tot_attendance']), att[0]['tot_attendance'] % 1 * 60)"/></td></tr>
+                        <tr><td>Total Difference</td><td> : </td><td><span t-esc="'%02d:%02d' % (int(att[0]['tot_difference']), att[0]['tot_difference'] % 1 * 60)"/></td></tr>
+                        <tr><td>Workday</td><td> : </td><td><span t-esc="att[0]['hari_calendar']"/></td></tr>
+                        <tr><td>Kehadiran</td><td> : </td><td><span t-esc="att[0]['kehadiran']"/></td></tr>
+                    </table>
+                    </td>
+                    <td>
+                    <table>
+						<tr><td>WFO</td><td> : </td><td><span t-esc="att[0]['at_wfo']"/></td></tr>
+						<tr><td>WFH</td><td> : </td><td><span t-esc="att[0]['at_wfh']"/></td></tr>
+                    	<tr><td>Site Office</td><td> : </td><td><span t-esc="att[0]['at_site']"/></td></tr>
+                    	<tr><td>Workday(weekday)</td><td> : </td><td><span t-esc="att[0]['workday_hadir']"/></td></tr>
+                        <tr><td>Workday(holiday)</td><td> : </td><td><span t-esc="att[0]['holiday_hadir']"/></td></tr>
+                        <tr><td>Unapproved</td><td> : </td><td><span t-esc="att[0]['tot_unapp']"/></td></tr>
+                    </table>
+                    </td>
+                     <td>
+                    <table >
+                    	<tr><td>Terlambat</td><td> : </td><td><span t-esc="att[0]['terlambat']"/></td></tr>
+                    	<tr><td>PLA</td><td> : </td><td><span t-esc="att[0]['lbh_awal']"/></td></tr>
+                        <tr><td>No Checkout</td><td> : </td><td><span t-esc="att[0]['no_checkout']"/></td></tr>
+                        <tr><td>HDL</td><td> : </td><td><span t-esc="att[0]['half_time']"/></td></tr>
+						<tr><td>Total Leave</td><td> : </td><td><span t-esc="att[0]['tot_leave']"/></td></tr>
+                        <tr><td>Send Report</td><td> : </td><td><span t-esc="att[0]['message']"/></td></tr>
+                    </table>
+                    </td>
+                 </table>
+                 <br/>
+				<!--table class="table table-condensed" style="font-size:12px;" width="100%">
+						<thead>
+							<tr>
+								<th class="text-center" style="width:10%; border: solid 1px #000;">Work Day</th>
+								<th class="text-center" style="width:10%; border: solid 1px #000;">Kehadiran</th>
+								<th class="text-center" style="width:10%; border: solid 1px #000;">Workday(weekday)</th>
+								<th class="text-center" style="width:10%; border: solid 1px #000;">Workday(holiday)</th>
+								<th class="text-center" style="width:15%; border: solid 1px #000;">No Check Out</th>
+								<th class="text-center" style="width:10%; border: solid 1px #000;">Terlambat</th>
+								<th class="text-center" style="width:10%; border: solid 1px #000;">PLA</th>
+								<th class="text-center" style="width:10%; border: solid 1px #000;">HDL</th>
+								<th class="text-center" style="width:15%; border: solid 1px #000;">Send Report</th>
+							</tr>
+					   </thead>
+					   <tbody class="sale_tbody">
+									<tr>
+										<td class="text-center" style="border: solid 1px #000;">
+										    <span t-esc="att[0]['hari_calendar']"/>
+										</td>
+										<td class="text-center" style="border: solid 1px #000;">
+										    <span t-esc="att[0]['kehadiran']"/>
+										</td>
+										<td class="text-center" style="border: solid 1px #000;">
+										    <span t-esc="att[0]['workday_hadir']"/>
+										</td>
+										<td class="text-center" style="border: solid 1px #000;">
+										    <span t-esc="att[0]['holiday_hadir']"/>
+										</td>
+										<td class="text-center" style="border: solid 1px #000;">
+										    <span t-esc="att[0]['no_checkout']"/>
+										</td>
+										<td class="text-center" style="border: solid 1px #000;">
+										    <span t-esc="att[0]['terlambat']"/>
+										</td>
+										<td class="text-center" style="border: solid 1px #000;">
+										    <span t-esc="att[0]['lbh_awal']"/>
+										</td>
+										<td class="text-center" style="border: solid 1px #000;">
+										    <span t-esc="att[0]['half_time']"/>
+										</td>
+										<td class="text-center" style="border: solid 1px #000;">
+										    <span t-esc="att[0]['message']"/>
+										</td>
+
+									</tr>
+									<tr t-if="len(att)== 0" >
+										<td style="border: solid 1px #000;">&#160;</td>
+										<td style="border: solid 1px #000;">&#160;</td>
+										<td style="border: solid 1px #000;">&#160;</td>
+										<td style="border: solid 1px #000;">&#160;</td>
+										<td style="border: solid 1px #000;">&#160;</td>
+										<td style="border: solid 1px #000;">&#160;</td>
+										<td style="border: solid 1px #000;">&#160;</td>
+									</tr>
+						</tbody>
+					</table-->
+
+                 <br/>
+
+				  <div style="page-break-inside: avoid;">
+				  <div style="font-weight: bold;">Monthly Recapitulation Report :
+                  <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%B-%Y')"/>
+                  </div>
+					<t t-foreach="o.timesheet_lines()" t-as="page">
+					<table class="table table-condensed" style="font-size:12px;" width="100%">
+						<thead>
+							<tr>
+								<th class="text-center" style="width:5%; border: solid 1px #000;">No.</th>
+								<th class="text-center" style="width:45%; border: solid 1px #000;">Project</th>
+								<th class="text-center" style="width:30%; border: solid 1px #000;">Manager</th>
+								<th class="text-center" style="width:20%; border: solid 1px #000;">Work Time</th>
+							</tr>
+					   </thead>
+
+					    <tbody class="sale_tbody">
+					   	<t t-foreach="page" t-as="layout_project">
+
+<!--								<t t-if="layout_category_size &gt;= 1 or page_size &gt;= 1">-->
+									<tr>
+										<td class="text-center" style="border: solid 1px #000;">
+											<span t-esc="layout_project_index + 1"/>
+										</td>
+										<td class="text-center" style="border: solid 1px #000;">
+											<t t-esc="layout_project['name']"/>
+										</td>
+										<td class="text-center" style="border: solid 1px #000;">
+											<t t-esc="layout_project['manager']"/>
+										</td>
+										<t t-foreach="layout_project['lines']" t-as="l"/>
+                                    	<td class="text-right" style="border: solid 1px #000;">
+                                        	<t t-set="subtotal" t-value="sum(line.unit_amount for line in layout_project['lines'])"/>
+                                        	<t t-esc="'%02d:%02d' % (int(subtotal), subtotal % 1 * 60)" />
+                                    	</td>
+									</tr>
+<!--								</t>-->
+						</t>
+						</tbody>
+
+						<tr t-if="total == 0.0">
+							<td style="border: solid 1px #000;">&#160;</td>
+							<td style="border: solid 1px #000;">&#160;</td>
+							<td style="border: solid 1px #000;">&#160;</td>
+							<td style="border: solid 1px #000;">&#160;</td>
+						</tr>
+						<tr>
+							<td style="border-left:solid 1px #000; border-bottom:solid 1px #000; border-top:solid 1px #000;"></td>
+							<td style="border-bottom:solid 1px #000; border-top:solid 1px #000;"></td>
+							<td class="text-center" style="border-bottom:solid 1px #000; font-weight: bold; border-top:solid 1px #000;">Total Duration</td>
+							<td class="text-right" style="border: solid 1px #000; font-weight: bold;">
+							<t t-esc="'%02d:%02d' % (int(total), total % 1 * 60)" /></td>
+						</tr>
+					</table>
+				</t>
+				</div>
+				<br/>
+				<div style="page-break-inside: avoid;">
+				<div style="font-weight: bold;">Activity Detail :</div>
+				<table class="table table-condensed" style="font-size:12px;" width="100%">
+						<thead>
+							<tr>
+								<th class="text-center" style="width:5%; border: solid 1px #000;">No.</th>
+								<th class="text-center" style="width:20%; border: solid 1px #000;">Date</th>
+								<th class="text-center" style="width:75%; border: solid 1px #000;">Activity Detail</th>
+							</tr>
+					   </thead>
+					   <tbody class="sale_tbody">
+									<tr t-foreach="aktivitas" t-as="a">
+										<td class="text-center" style="border: solid 1px #000;">
+											<span t-esc="a_index + 1"/>
+										</td>
+										<td class="text-center" style="border: solid 1px #000;">
+											<span t-esc="a['date']"/>
+										</td>
+										<td class="text-left" style="border: solid 1px #000;">
+											<span t-raw="a['detail_activity']"/>
+										</td>
+									</tr>
+									<tr t-if="len(aktivitas)== 0" >
+										<td style="border: solid 1px #000;">&#160;</td>
+										<td style="border: solid 1px #000;">&#160;</td>
+										<td style="border: solid 1px #000;">&#160;</td>
+									</tr>
+						</tbody>
+					</table>
+					</div>
+                 <br/>
+                 <div style="page-break-inside: avoid;">
+                 <div style="font-weight: bold;">Work Plan Ahead :</div>
+				<table class="table table-condensed" style="font-size:12px;" width="100%">
+						<thead>
+							<tr>
+								<th class="text-center" style="width:5%; border: solid 1px #000;">No.</th>
+								<th class="text-center" style="width:20%; border: solid 1px #000;">Date</th>
+								<th class="text-center" style="width:75%; border: solid 1px #000;">Work Plan</th>
+							</tr>
+					   </thead>
+					   <tbody class="sale_tbody">
+									<tr t-foreach="aktivitas" t-as="a">
+										<td class="text-center" style="border: solid 1px #000;">
+											<span t-esc="a_index + 1"/>
+										</td>
+										<td class="text-center" style="border: solid 1px #000;">
+											<span t-esc="a['date']"/>
+										</td>
+										<td class="text-left" style="border: solid 1px #000;">
+											<span t-raw="a['plan_activity']"/>
+										</td>
+									</tr>
+									<tr t-if="len(aktivitas)== 0" >
+										<td style="border: solid 1px #000;">&#160;</td>
+										<td style="border: solid 1px #000;">&#160;</td>
+										<td style="border: solid 1px #000;">&#160;</td>
+									</tr>
+						</tbody>
+					</table>
+				</div>
+                 <br/>
+                <div style="page-break-inside: avoid;">
+				<div style="font-weight: bold;">Attendance Note :</div>
+				<table class="table table-condensed" style="font-size:12px;" width="100%">
+						<thead>
+							<tr>
+								<th class="text-center" style="width:5%; border: solid 1px #000;">No.</th>
+								<th class="text-center" style="width:25%; border: solid 1px #000;">Description</th>
+								<th class="text-center" style="width:10%; border: solid 1px #000;">Date From</th>
+								<th class="text-center" style="width:10%; border: solid 1px #000;">Date To</th>
+								<th class="text-center" style="width:10%; border: solid 1px #000;">Duration</th>
+								<th class="text-center" style="width:30%; border: solid 1px #000;">Notes</th>
+								<th class="text-center" style="width:10%; border: solid 1px #000;">State</th>
+							</tr>
+					   </thead>
+					   <tbody class="sale_tbody">
+									<tr t-foreach="leave" t-as="l">
+										<td class="text-center" style="border: solid 1px #000;">
+											<span t-esc="l_index + 1"/>
+										</td>
+										<td class="text-left" style="border: solid 1px #000;">
+											<span t-esc="l['name']"/>
+										</td>
+										<td class="text-center" style="border: solid 1px #000;">
+											<span t-esc="l['date_from']"/>
+										</td>
+										<td class="text-center" style="border: solid 1px #000;">
+											<span t-esc="l['date_to']"/>
+										</td>
+										<td class="text-center" style="border: solid 1px #000;">
+											<span t-esc="l['days']"/>&#160;days
+										</td>
+										<td class="text-left" style="border: solid 1px #000;">
+											<span t-esc="l['notes']"/>
+										</td>
+										<td class="text-left" style="border: solid 1px #000;">
+											<span t-if="l['state']=='draft'">To Submit</span>
+											<span t-if="l['state']=='cancel'">Cancelled</span>
+											<span t-if="l['state']=='confirm'">To Approve</span>
+											<span t-if="l['state']=='refuse'">Refused</span>
+											<span t-if="l['state']=='validate1'">Second Approved</span>
+											<span t-if="l['state']=='validate'">Approved</span>
+										</td>
+									</tr>
+									<tr t-if="len(leave)== 0" >
+										<td style="border: solid 1px #000;">&#160;</td>
+										<td style="border: solid 1px #000;">&#160;</td>
+										<td style="border: solid 1px #000;">&#160;</td>
+										<td style="border: solid 1px #000;">&#160;</td>
+										<td style="border: solid 1px #000;">&#160;</td>
+										<td style="border: solid 1px #000;">&#160;</td>
+										<td style="border: solid 1px #000;">&#160;</td>
+									</tr>
+
+						</tbody>
+					</table>
+				</div>
+                 <br/>
+                <div style="page-break-inside: avoid;">
+				<div style="font-weight: bold;">Leave Plan :</div>
+				<table class="table table-condensed" style="font-size:12px;" width="100%">
+						<thead>
+							<tr>
+								<th class="text-center" style="width:5%; border: solid 1px #000;">No.</th>
+								<th class="text-center" style="width:25%; border: solid 1px #000;">Description</th>
+								<th class="text-center" style="width:10%; border: solid 1px #000;">Date From</th>
+								<th class="text-center" style="width:10%; border: solid 1px #000;">Date To</th>
+								<th class="text-center" style="width:10%; border: solid 1px #000;">Duration</th>
+								<th class="text-center" style="width:30%; border: solid 1px #000;">Notes</th>
+								<th class="text-center" style="width:10%; border: solid 1px #000;">State</th>
+							</tr>
+					   </thead>
+					   <tbody class="sale_tbody">
+									<tr t-foreach="plan" t-as="p">
+										<td class="text-center" style="border: solid 1px #000;">
+											<span t-esc="p_index + 1"/>
+										</td>
+										<td class="text-left" style="border: solid 1px #000;">
+											<span t-esc="p['name']"/>
+										</td>
+										<td class="text-center" style="border: solid 1px #000;">
+											<span t-esc="p['date_from']"/>
+										</td>
+										<td class="text-center" style="border: solid 1px #000;">
+											<span t-esc="p['date_to']"/>
+										</td>
+										<td class="text-center" style="border: solid 1px #000;">
+											<span t-esc="p['days']"/>&#160;days
+										</td>
+										<td class="text-left" style="border: solid 1px #000;">
+											<span t-esc="p['notes']"/>
+										</td>
+										<td class="text-left" style="border: solid 1px #000;">
+											<span t-if="p['state']=='draft'">To Submit</span>
+											<span t-if="p['state']=='cancel'">Cancelled</span>
+											<span t-if="p['state']=='confirm'">To Approve</span>
+											<span t-if="p['state']=='refuse'">Refused</span>
+											<span t-if="p['state']=='validate1'">Second Approved</span>
+											<span t-if="p['state']=='validate'">Approved</span>
+										</td>
+									</tr>
+									<tr t-if="len(plan)== 0" >
+										<td style="border: solid 1px #000;">&#160;</td>
+										<td style="border: solid 1px #000;">&#160;</td>
+										<td style="border: solid 1px #000;">&#160;</td>
+										<td style="border: solid 1px #000;">&#160;</td>
+										<td style="border: solid 1px #000;">&#160;</td>
+										<td style="border: solid 1px #000;">&#160;</td>
+										<td style="border: solid 1px #000;">&#160;</td>
+									</tr>
+						</tbody>
+					</table>
+					</div>
+					<br/>
+                <div style="page-break-inside: avoid;">
+				<div style="font-weight: bold;">Overtime :</div>
+				<table class="table table-condensed" style="font-size:12px;" width="100%">
+						<thead>
+							<tr>
+								<th class="text-center" style="width:5%; border: solid 1px #000;">No.</th>
+								<th class="text-center" style="width:10%; border: solid 1px #000;">Date</th>
+								<th class="text-center" style="width:10%; border: solid 1px #000;">Duration</th>
+								<th class="text-center" style="width:60%; border: solid 1px #000;">Notes</th>
+								<th class="text-center" style="width:15%; border: solid 1px #000;">State</th>
+							</tr>
+					   </thead>
+					   <tbody class="sale_tbody">
+									<tr t-foreach="overtime" t-as="ot">
+										<td class="text-center" style="border: solid 1px #000;">
+											<span t-esc="ot_index + 1"/>
+										</td>
+										<td class="text-center" style="border: solid 1px #000;">
+											<span t-esc="ot['date_from']"/>
+										</td>
+										<td class="text-center" style="border: solid 1px #000;">
+											<span t-esc="ot['hours']"/>&#160;Hours
+										</td>
+										<td class="text-left" style="border: solid 1px #000;">
+											<span t-esc="ot['notes']"/>
+										</td>
+										<td class="text-left" style="border: solid 1px #000;">
+											<span t-if="ot['state']=='draft'">New</span>
+											<span t-if="ot['state']=='cancel'">Cancelled</span>
+											<span t-if="ot['state']=='confirm'">Waiting First Approval</span>
+											<span t-if="ot['state']=='approve_by_hr'">Waiting Department Approval</span>
+											<span t-if="ot['state']=='refuse'">Refused</span>
+											<span t-if="ot['state']=='validate'">Done</span>
+										</td>
+									</tr>
+									<tr t-if="len(overtime)== 0" >
+										<td style="border: solid 1px #000;">&#160;</td>
+										<td style="border: solid 1px #000;">&#160;</td>
+										<td style="border: solid 1px #000;">&#160;</td>
+										<td style="border: solid 1px #000;">&#160;</td>
+										<td style="border: solid 1px #000;">&#160;</td>
+									</tr>
+						</tbody>
+						 <tr t-if="len(overtime)!= 0">
+							<td style="border-left:solid 1px #000; border-bottom:solid 1px #000; border-top:solid 1px #000;"></td>
+							<td style="border-bottom:solid 1px #000; border-top:solid 1px #000;"></td>
+							<td style="border-bottom:solid 1px #000; border-top:solid 1px #000;"></td>
+							<td class="text-center" style="border-bottom:solid 1px #000; font-weight: bold; border-top:solid 1px #000;">Total Duration</td>
+							<td class="text-center" style="border: solid 1px #000; font-weight: bold;">
+							<span t-esc="overtime[0]['ovt_done']"/> / <span t-esc="overtime[0]['tot_ovt']"/>&#160;Hours</td>
+						  </tr>
+						  <tr t-if="len(overtime)== 0">
+							<td style="border-left:solid 1px #000; border-bottom:solid 1px #000; border-top:solid 1px #000;"></td>
+							<td style="border-bottom:solid 1px #000; border-top:solid 1px #000;"></td>
+							<td style="border-bottom:solid 1px #000; border-top:solid 1px #000;"></td>
+							<td class="text-center" style="border-bottom:solid 1px #000; font-weight: bold; border-top:solid 1px #000;">Total Duration</td>
+							<td class="text-center" style="border: solid 1px #000; font-weight: bold;">
+							</td>
+						  </tr>
+					</table>
+					</div>
+					<br/>
+					<div style="page-break-inside: avoid;">
+					<div style="font-weight: bold;">Idea Junction :</div>
+					<table class="table table-condensed" style="font-size:12px;" width="100%">
+						<thead>
+							<tr>
+								<th class="text-center" style="width:5%; border: solid 1px #000;">No.</th>
+								<th class="text-center" style="width:20%; border: solid 1px #000;">Created On</th>
+								<th class="text-center" style="width:75%; border: solid 1px #000;">Idea Details</th>
+							</tr>
+					   </thead>
+					   <tbody class="sale_tbody">
+									<tr t-foreach="idea" t-as="d">
+										<td class="text-center" style="border: solid 1px #000;">
+											<span t-esc="d_index + 1"/>
+										</td>
+										<td class="text-center" style="border: solid 1px #000;">
+											<span t-esc="d['date_created']"/>
+										</td>
+										<td class="text-left" style="border: solid 1px #000;">
+											<span t-esc="d['idea_details']"/>
+										</td>
+									</tr>
+									<tr t-if="len(idea)== 0" >
+										<td style="border: solid 1px #000;">&#160;</td>
+										<td style="border: solid 1px #000;">&#160;</td>
+										<td style="border: solid 1px #000;">&#160;</td>
+									</tr>
+						</tbody>
+					</table>
+
+				</div>
+                		</div>
+                    </t>
+                </t>
+            </t>
+
+        </template>
+
+</odoo>
