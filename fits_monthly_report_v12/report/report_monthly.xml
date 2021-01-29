@@ -70,7 +70,7 @@
 				<div style="font-weight: bold;"><u>Timesheet &amp; Attendance Detail :</u></div>
 				<table width="100%">
                  	<td>
-                    <table>
+                    <table >
                         <tr><td>Total Jam Timesheet</td><td> : </td><td><span t-esc="'%02d:%02d' % (int(att[0]['tot_timesheet']), att[0]['tot_timesheet'] % 1 * 60)" /></td></tr>
                         <tr><td>Total Jam Attendance</td><td> : </td><td><span t-esc="'%02d:%02d' % (int(att[0]['tot_attendance']), att[0]['tot_attendance'] % 1 * 60)"/></td></tr>
                         <tr><td>Total Difference</td><td> : </td><td><span t-esc="'%02d:%02d' % (int(att[0]['tot_difference']), att[0]['tot_difference'] % 1 * 60)"/></td></tr>
@@ -79,12 +79,11 @@
                     </table>
                     </td>
                     <td>
-                    <table>
-						<tr><td>WFO</td><td> : </td><td><span t-esc="att[0]['at_wfo']"/></td></tr>
-						<tr><td>WFH</td><td> : </td><td><span t-esc="att[0]['at_wfh']"/></td></tr>
-                    	<tr><td>Site Office</td><td> : </td><td><span t-esc="att[0]['at_site']"/></td></tr>
+                    <table >
+<!--                    	<tr><td>at Site Office</td><td> : </td><td><span t-esc="att[0]['at_site']"/></td></tr>-->
                     	<tr><td>Workday(weekday)</td><td> : </td><td><span t-esc="att[0]['workday_hadir']"/></td></tr>
                         <tr><td>Workday(holiday)</td><td> : </td><td><span t-esc="att[0]['holiday_hadir']"/></td></tr>
+                    	<tr><td>Total Leave</td><td> : </td><td><span t-esc="att[0]['tot_leave']"/></td></tr>
                         <tr><td>Unapproved</td><td> : </td><td><span t-esc="att[0]['tot_unapp']"/></td></tr>
                     </table>
                     </td>
@@ -94,7 +93,6 @@
                     	<tr><td>PLA</td><td> : </td><td><span t-esc="att[0]['lbh_awal']"/></td></tr>
                         <tr><td>No Checkout</td><td> : </td><td><span t-esc="att[0]['no_checkout']"/></td></tr>
                         <tr><td>HDL</td><td> : </td><td><span t-esc="att[0]['half_time']"/></td></tr>
-						<tr><td>Total Leave</td><td> : </td><td><span t-esc="att[0]['tot_leave']"/></td></tr>
                         <tr><td>Send Report</td><td> : </td><td><span t-esc="att[0]['message']"/></td></tr>
                     </table>
                     </td>

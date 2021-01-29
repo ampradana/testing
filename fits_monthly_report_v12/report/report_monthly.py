@@ -122,8 +122,6 @@ class ReportMonthly(models.AbstractModel):
         tot_absen = 0
         tot_diff = 0
         at_site = 0
-        at_wfo = 0
-        at_wfh = 0
         month_met = 0
         ovt_done = 0
         tot_ovt = 0
@@ -199,9 +197,7 @@ class ReportMonthly(models.AbstractModel):
                 no_check += sheetday.no_checkout
                 workday_hadir += sheetday.work_day
                 holiday_hadir += sheetday.holiday
-                at_site += sheetday.site_office
-                at_wfo += sheetday.wfo
-                at_wfh += sheetday.wfh
+                # at_site += sheetday.site_office
                 # month_met += sheetday.monthly_meeting
                   
             obj_timesheet = obj_sheet = self.env['hr_timesheet_sheet.sheet.day'].sudo().search([('sheet_id','=',sheet.id)])
@@ -261,10 +257,27 @@ class ReportMonthly(models.AbstractModel):
          
         
       
-        work_data = obj_employee.get_work_days_data(day_from, day_to, calendar= obj_employee.resource_calendar_id)
-        workday = work_data['days']
-        holiday = len(holiday_obj)
-        hari_calendar = workday - holiday 
+        #nb_of_days = (day_to - day_from).days
+        nb_of_days = (day_to - day_from).days + 1
+        #nb_of_days = (day_to - day_from).days - 1
+        #nb_of_days = (day_to - day_from).days + 5
+        #date_start = day_from - relativedelta(days=1)
+        date_start = day_from
+        hari = []
+        for day in range(0, nb_of_days):
+            if not obj_employee:
+                hari_calendar = 0
+            else :    
+                working_day = self.get_next_day(date_start + timedelta(days=day))
+                print ('======================working day==================', working_day)
+                hari.append(working_day)
+                days = list(set(hari))
+                print ('=========================days===============', days)
+                workday = len(days)
+                holiday = len(holiday_obj)
+                holiday_to = len(holiday_next)
+                print ('=========================days===============', workday, holiday, holiday_to)
+                hari_calendar = workday - holiday
                   
                   
         leave_obj=self.env['hr.leave'].sudo().search([('employee_id','=',obj_employee.id), ('date_from','>=', docs.from_date), 
@@ -290,8 +303,6 @@ class ReportMonthly(models.AbstractModel):
                     'tot_leave': tot_leave,
                     'tot_unapp': tot_unapp,
                     'at_site': at_site,
-                    'at_wfo': at_wfo,
-                    'at_wfh': at_wfh,
                     'month_met': month_met,
                       
                     })
