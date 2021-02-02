@@ -1,0 +1,180 @@
+<odoo>
+  <data>
+      	<record id="view_account_analytic_kso_form" model="ir.ui.view">
+		    <field name="name">account.analytic.kso.form</field>
+		    <field name="model">account.analytic.account</field>
+		    <field name="inherit_id" ref="analytic.view_account_analytic_account_form"/>
+		    <field name="arch" type="xml">
+		      <field name="tag_ids" position="after">
+		        <field name="mitra_ids" widget="many2many_tags"/>
+		      </field>
+		    </field>
+  		</record>
+  		
+  		<record id="kso_project" model="ir.ui.view">
+            <field name="name">project.project.kso.form</field>
+            <field name="model">project.project</field>
+            <field name="inherit_id" ref="project.edit_project" />
+            <field name="arch" type="xml">
+                 <field name="partner_id" position="after">
+                    <field name="mitra_ids" widget="many2many_tags"/>
+                </field>
+            </field>
+        </record>
+        
+	   <record id="purchase_order_form" model="ir.ui.view">
+	    <field name="name">purchase.order.form</field>
+	    <field name="model">purchase.order</field>
+	    <field name="inherit_id" ref="purchase.purchase_order_form"/>
+	    <field name="arch" type="xml">
+	      <xpath expr="//field[@name='partner_ref']" position="after">
+	        <field name="account_analytic_id"
+	          groups="analytic.group_analytic_accounting"
+	          />
+	        <field name="mitra_ids" widget="many2many_tags"/>
+	      </xpath>
+	      <field name="order_line" position="attributes">
+	        <attribute name="context">{'default_account_analytic_id': account_analytic_id}</attribute>
+	      </field>
+	    </field>
+  	</record>
+  	
+  <record id="invoice_analytic_form" model="ir.ui.view">
+    <field name="name">invoice.analytic.form</field>
+    <field name="model">account.invoice</field>
+    <field name="inherit_id" ref="account.invoice_form"/>
+    <field name="arch" type="xml">
+      <xpath expr="//field[@name='user_id']" position="after">
+        <field name="account_analytic_id"
+          groups="analytic.group_analytic_accounting"
+          />
+        <field name="mitra_ids" widget="many2many_tags"/>
+      </xpath>
+      <field name="invoice_line_ids" position="attributes">
+        <attribute name="context">{'default_account_analytic_id': account_analytic_id}</attribute>
+      </field>
+    </field>
+  </record>
+  
+  <record id="bill_analytic_form" model="ir.ui.view">
+    <field name="name">bill.analytic.form</field>
+    <field name="model">account.invoice</field>
+    <field name="inherit_id" ref="account.invoice_supplier_form"/>
+    <field name="arch" type="xml">
+      <xpath expr="//field[@name='user_id']" position="after">
+        <field name="account_analytic_id"
+          groups="analytic.group_analytic_accounting"
+          />
+        <field name="mitra_ids" widget="many2many_tags"/>
+      </xpath>
+      <field name="invoice_line_ids" position="attributes">
+        <attribute name="context">{'default_account_analytic_id': account_analytic_id}</attribute>
+      </field>
+    </field>
+  </record>
+  
+  <record id="kso_advance_advance" model="ir.ui.view">
+    <field name="name">advance.expenses.kso.form</field>
+    <field name="model">employee.advance.expense</field>
+    <field name="inherit_id" ref="employee_expense_advance.employee_advance_expense_form_view" />
+    <field name="arch" type="xml">
+        <field name="user_id" position="after">
+           <field name="account_analytic_id" required="1"/>
+           <field name="mitra_ids" widget="many2many_tags"/>
+         </field>
+     </field>
+    </record>
+    
+   <record id="kso_expense_view" model="ir.ui.view">
+	    <field name="name">hr.expenses.kso.form</field>
+	    <field name="model">hr.expense</field>
+	    <field name="inherit_id" ref="hr_expense.hr_expense_view_form" />
+	    <field name="arch" type="xml">
+	        <field name="analytic_account_id" position="after">
+	           <field name="mitra_ids" widget="many2many_tags"/>
+	         </field>
+	     </field>
+    </record>
+    
+    <record id="kso_expense" model="ir.ui.view">
+	    <field name="name">hr.expenses.sheet.kso.form</field>
+	    <field name="model">hr.expense.sheet</field>
+	    <field name="inherit_id" ref="hr_expense.view_hr_expense_sheet_form" />
+	    <field name="arch" type="xml">
+	    	<!--button name="approve_expense_sheets" position="after">
+	    		<button name="%(hr_expense.hr_expense_refuse_wizard_action)d" states="submit" string="Refuse" type="action" groups="fits_project_kso.group_project_kso_manager" />
+	        </button-->
+	    	<field name="journal_id" position="after">
+	        	<field name="account_analytic_id"
+	          		groups="analytic.group_analytic_accounting"
+	          		/>
+	           <field name="mitra_ids" widget="many2many_tags"/>
+	         </field>
+	         <field name="expense_line_ids" position="replace">
+	        	<field name="expense_line_ids" nolabel="1" widget="many2many" domain="[('state', '=', 'draft'),
+                         ('analytic_account_id', '=', account_analytic_id)]" 
+	        	  options="{'not_delete': True}" context="{'expense_adding_line': True}" />
+	         </field>
+	     </field>
+    </record>
+    
+    <record id="kso_asset" model="ir.ui.view">
+	    <field name="name">asset.kso.form</field>
+	    <field name="model">asset.asset</field>
+	    <field name="inherit_id" ref="asset.assets_form_view" />
+	    <field name="arch" type="xml">
+	        <field name="active" position="after">
+	        	<field name="account_analytic_id"
+	          		groups="analytic.group_analytic_accounting"
+	          		required="1"/> 
+	           <field name="mitra_ids" widget="many2many_tags"/>
+	         </field>
+	     </field>
+    </record>
+    
+     <record id="kso_account_account" model="ir.ui.view">
+	    <field name="name">account.account.kso.form</field>
+	    <field name="model">account.account</field>
+	    <field name="inherit_id" ref="account.view_account_form" />
+	    <field name="arch" type="xml">
+	       <field name="deprecated" position="after">
+	           <field name="mitra_ids" widget="many2many_tags"/>
+	         </field>
+	     </field>
+    </record>
+    
+     <record id="kso_account_journal" model="ir.ui.view">
+	    <field name="name">account.journal.kso.form</field>
+	    <field name="model">account.journal</field>
+	    <field name="inherit_id" ref="account.view_account_journal_form" />
+	    <field name="arch" type="xml">
+	         <field name="account_control_ids" position="after">
+	           <field name="mitra_ids" widget="many2many_tags"/>
+	         </field>
+	     </field>
+    </record>
+    
+    <record id="kso_todo_line" model="ir.ui.view">
+	    <field name="name">todo.line.kso.form</field>
+	    <field name="model">todo.today</field>
+	    <field name="inherit_id" ref="fits_to_do_today.view_todo_today_form" />
+	    <field name="arch" type="xml">
+	        <field name="project_id" position="after">
+	           <field name="mitra_ids" widget="many2many_tags"/>
+	         </field>
+	     </field>
+    </record>
+    
+     <record id="kso_pb" model="ir.ui.view">
+	    <field name="name">pb.kso.form</field>
+	    <field name="model">fits.project.budget</field>
+	    <field name="inherit_id" ref="fits_project_budget_v12.fits_project_budget_view_form" />
+	    <field name="arch" type="xml">
+	        <field name="analytic_account_id" position="after">
+	           <field name="mitra_ids" widget="many2many_tags"/>
+	         </field>
+	     </field>
+    </record>
+  
+  </data>
+</odoo>
