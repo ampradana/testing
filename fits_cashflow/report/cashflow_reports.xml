@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+         <report
+            id="action_report_cashflow"
+            model="accounting.cashflow"
+            string="Laporan Arus Kas"
+            report_type="qweb-pdf"
+            name="fits_cashflow.report_cashflow"
+            file="fits_cashflow.report_cashflow" 
+            />
+
+    </data>
+
+</odoo>

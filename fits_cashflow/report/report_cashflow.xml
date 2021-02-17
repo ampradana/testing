@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_cashflow">
+        <t t-call="web.html_container">
+            <t t-set="data_report_margin_top" t-value="12"/>
+            <t t-set="data_report_header_spacing" t-value="9"/>
+            <t t-set="data_report_dpi" t-value="110"/>
+
+            <t t-call="web.internal_layout">
+                <div class="page">
+                	 <strong><p style="font-size: 20px;" class="text-center" t-esc="data['company_id'][1]"/></strong>
+                	 <strong><p style="font-size: 20px;" class="text-center">Laporan Arus Kas</p></strong>
+                     <strong t-if="data['periode'] == False"><p style="font-size: 20px;" class="text-center"><span t-esc="header"/>&#160;<t t-if="data['date_to']"><span t-esc="datetime.datetime.strptime(data['date_to'], '%Y-%m-%d').strftime('%d %B %Y')"/>
+                     </t></p></strong>
+                     <strong t-if="data['periode'] == True"><p style="font-size: 20px;" class="text-center">PERIODE&#160;<t t-if="data['date_from']"><span t-esc="datetime.datetime.strptime(data['date_from'], '%Y-%m-%d').strftime('%d-%m-%Y')"/>
+                     </t>&#160;s/d&#160;<t t-if="data['date_to']"><span t-esc="datetime.datetime.strptime(data['date_to'], '%Y-%m-%d').strftime('%d-%m-%Y')"/>
+                     </t></p></strong>
+                     <strong ><p style="font-size: 20px;" class="text-center"><span t-esc="sub_header"/>
+                     </p></strong>
+                     <br/>
+                     <t t-if="data['date_from']">
+                            <div class="row mt32 mb32">
+                                <div class="col-8">
+                                    <p>
+                                        <b>For the Period / Year End :</b>&amp;nbsp;
+                                        <span t-esc="end_date"/>
+                                        <br/>
+                                        <b>Cash at the beginning of the Period / Year :</b>&amp;nbsp;
+                                        <span t-esc="round(sum_begin, 2) * -1"
+                                             t-options='{"widget": "float", "precision": 2}'/> 
+                                    </p>
+
+                                </div>
+                            </div>
+                       </t>
+                       <br/>
+                        	
+                    <table class="table table-sm table-reports">
+                        <thead>
+                            <tr >
+                                <th class="text-left">Operation Activities</th>
+                                <th class="text-right"><span t-esc="sum_operation" t-options='{"widget": "float", "precision": 2}'/></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        	<tr >
+                             <td class="text-left">
+                                  <span style="color: white;" t-esc="'..'"/>
+                                        <span>Net Income</span>
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-esc="sum_income" t-options='{"widget": "float", "precision": 2}'/>
+                                    </td>
+                                </tr>
+                            <t t-foreach="operation" t-as="o">
+                                <tr >
+                                    <td class="text-left">
+                                        <span style="color: white;" t-esc="'..'"/>
+<!--                                        <span t-esc="k['code']"/-->
+                                        <span t-esc="o['name']"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-esc="o['balance'] * -1" t-options='{"widget": "float", "precision": 2}'/>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                    <br/>
+                    <table class="table table-sm table-reports">
+                        <thead>
+                            <tr >
+                                <th class="text-left">Investing Activities</th>
+                                <th class="text-right"><span t-esc="sum_investing" t-options='{"widget": "float", "precision": 2}'/></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="investing" t-as="i">
+                                <tr >
+                                    <td class="text-left">
+                                        <span style="color: white;" t-esc="'..'"/>
+<!--                                        <span t-esc="k['code']"/-->
+                                        <span t-esc="i['name']"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-esc="i['balance'] * -1" t-options='{"widget": "float", "precision": 2}'/>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                    <br/>
+                    <table class="table table-sm table-reports">
+                        <thead>
+                            <tr >
+                                <th class="text-left">Financing Activities</th>
+                                <th class="text-right"><span t-esc="sum_financing" t-options='{"widget": "float", "precision": 2}'/></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="financing" t-as="f">
+                                <tr >
+                                    <td class="text-left">
+                                        <span style="color: white;" t-esc="'..'"/>
+<!--                                        <span t-esc="k['code']"/-->
+                                        <span t-esc="f['name']"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-esc="f['balance'] * -1" t-options='{"widget": "float", "precision": 2}'/>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                    <br/>
+                   <tr>
+                     <td>
+                      	<b>Net Cash Increases</b>
+                      </td>
+                      <td> 
+                        <b>
+                          <span t-esc="round(bal_increases, 2)" style="float:right;"
+                           t-options='{"widget": "float", "precision": 2}'/>      	                                            
+                         </b>
+
+                       </td>
+                     </tr>
+                     <br/>
+                     <t t-if="data['date_from']">
+                        <tr>
+                          <td>
+                            <b>Cash at Year End</b>
+                           </td>
+                           <td> 
+                            	<b>
+    								<span t-esc="round(years_end, 2)" style="float:right;"
+                                                     t-options='{"widget": "float", "precision": 2}'/>
+                               	</b>
+							</td>
+                          </tr>
+                     </t> 
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>
